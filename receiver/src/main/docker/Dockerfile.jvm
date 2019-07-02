@@ -23,11 +23,11 @@
 #
 # Then, build the image with:
 #
-# docker build -f src/main/docker/Dockerfile.jvm -t jms-receiver-jvm .
+# docker build -f src/main/docker/Dockerfile.jvm -t quarkus-jms-receiver-jvm .
 #
 # Then run the container using:
 #
-# docker run -i --rm -p 8080:8080 jms-receiver-jvm
+# docker run -i --rm -p 8080:8080 quarkus-jms-receiver-jvm
 #
 ###
 FROM fabric8/java-alpine-openjdk8-jre

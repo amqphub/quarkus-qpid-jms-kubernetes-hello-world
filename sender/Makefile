@@ -17,11 +17,11 @@
 
 .PHONY: build
 build:
-	docker build -f src/main/docker/Dockerfile.native -t jms-sender .
+	docker build -f src/main/docker/Dockerfile.native -t quarkus-jms-sender .
 
 .PHONY: run
 run: build
-	docker run --rm -p 8080:8080 jms-sender
+	docker run --rm -p 8080:8080 quarkus-jms-sender
 
 .PHONY: push
 push:

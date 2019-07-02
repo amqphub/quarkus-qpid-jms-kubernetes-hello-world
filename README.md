@@ -1,10 +1,10 @@
-# Getting started with JMS on Kubernetes usiong Quarkus 
+# Getting started with JMS on Kubernetes usiong Quarkus
 
 This guide shows you how to send and receive messages using [Apache
 Qpid JMS](http://qpid.apache.org/components/jms/index.html) and
 [ActiveMQ Artemis](https://activemq.apache.org/artemis/index.html) on
-[Kubernetes](https://kubernetes.io/) using a Quarkus Qpid JMS extension. 
-It uses the [AMQP 1.0](http://www.amqp.org/) message protocol to send 
+[Kubernetes](https://kubernetes.io/) using a Quarkus Qpid JMS extension.
+It uses the [AMQP 1.0](http://www.amqp.org/) message protocol to send
 and receive messages.
 
 ## Overview
@@ -22,16 +22,16 @@ The example application has three parts:
   the messages as HTTP responses.
 
 The sender and the receiver use the JMS API to perform messaging
-operations. 
+operations.
 
-## Prerequisites 
+## Prerequisites
 
 * For native builds, [GraalVM](https://www.graalvm.org/) version [19.0.2](https://github.com/oracle/graal/releases/tag/vm-19.0.2)+ [installed](https://www.graalvm.org/docs/getting-started), with `GRAALVM_HOME` set and [native-image extension](https://www.graalvm.org/docs/reference-manual/aot-compilation/).
 
-## Steps
+* [Install and run Minikube in your
+  environment](https://kubernetes.io/docs/setup/minikube/)
 
-1. [Install and run Minikube in your
-   environment](https://kubernetes.io/docs/setup/minikube/)
+## Steps
 
 1. Configure your shell to use the Minikube Docker instance:
 
@@ -55,11 +55,11 @@ operations.
 
    ```bash
    $ cd sender/
-   $ mvn package -Pnative
+   $ mvn package -Pnative -Dnative-image.docker-build=true
    [Maven output]
-   $ docker build -f src/main/docker/Dockerfile.native -t quarkus-jms/hello-quarkus-jms-sender .
+   $ docker build -f src/main/docker/Dockerfile.native -t quarkus-jms-sender .
    [Docker output]
-   $ kubectl run sender --image quarkus-jms/hello-quarkus-jms-sender --image-pull-policy Never --env MESSAGING_SERVICE_HOST=broker
+   $ kubectl run sender --image quarkus-jms-sender --image-pull-policy Never --env MESSAGING_SERVICE_HOST=broker
    deployment.apps/sender created
    $ kubectl expose deployment/sender --port 8080 --type NodePort
    service/sender exposed
@@ -72,11 +72,11 @@ To build and run in native build mode:
 
    ```bash
    $ cd ../receiver/
-   $ mvn package -P native
+   $ mvn package -P native -Dnative-image.docker-build=true
    [Maven output]
-   $ docker build -f src/main/docker/Dockerfile.native -t quarkus-jms/hello-quarkus-jms-receiver .
+   $ docker build -f src/main/docker/Dockerfile.native -t quarkus-jms-receiver .
    [Docker output]
-   $ kubectl run receiver --image quarkus-jms/hello-quarkus-jms-receiver --image-pull-policy Never --env MESSAGING_SERVICE_HOST=broker
+   $ kubectl run receiver --image quarkus-jms-receiver --image-pull-policy Never --env MESSAGING_SERVICE_HOST=broker
    deployment.apps/receiver created
    $ kubectl expose deployment/receiver --port 8080 --type NodePort
    service/receiver exposed

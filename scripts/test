@@ -27,11 +27,11 @@ sender = None
 receiver = None
 
 try:
-    with working_env(HTTP_HOST="localhost", HTTP_PORT="8081"):
-        sender = start_process("java -jar sender/target/hello-world-jms-kubernetes-sender-1.0.0-SNAPSHOT-jar-with-dependencies.jar")
+    with working_env(quarkus.http.host="localhost", quarkus.http.port="8081"):
+        quarkus-jms-sender = start_process("java -jar sender/target/hello-world-quarkus-jms-sender-1.0.0-SNAPSHOT-runner.jar")
 
-    with working_env(HTTP_HOST="localhost", HTTP_PORT="8082"):
-        receiver = start_process("java -jar receiver/target/hello-world-jms-kubernetes-receiver-1.0.0-SNAPSHOT-jar-with-dependencies.jar")
+    with working_env(quarkus.http.host="localhost", quarkus.http.port="8082"):
+        quarkus-jms-receiver = start_process("java -jar receiver/target/hello-world-quarkus-jms-receiver-1.0.0-SNAPSHOT-runner.jar")
 
     while True:
         try:
@@ -45,9 +45,9 @@ try:
     call("curl -X POST -d \"hello 1\" -H \"Content-type: text/plain\" http://localhost:8081/api/send")
     call("curl -X POST -d \"hello 2\" -H \"Content-type: text/plain\" http://localhost:8081/api/send")
     call("curl -X POST -d \"hello 3\" -H \"Content-type: text/plain\" http://localhost:8081/api/send")
-    call("curl -X POST http://localhost:8082/api/receive")
-    call("curl -X POST http://localhost:8082/api/receive")
-    call("curl -X POST http://localhost:8082/api/receive")
+    call("curl http://localhost:8082/api/receive")
+    call("curl http://localhost:8082/api/receive")
+    call("curl http://localhost:8082/api/receive")
 finally:
-    terminate_process(sender)
-    terminate_process(receiver)
+    terminate_process(quarkus-jms-sender)
+    terminate_process(quarkus-jms-receiver)
