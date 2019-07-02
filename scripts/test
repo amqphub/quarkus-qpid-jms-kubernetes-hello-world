@@ -27,11 +27,11 @@ sender = None
 receiver = None
 
 try:
-    with working_env(quarkus.http.host="localhost", quarkus.http.port="8081"):
-        quarkus-jms-sender = start_process("java -jar sender/target/hello-world-quarkus-jms-sender-1.0.0-SNAPSHOT-runner.jar")
+    with working_env(QUARKUS_HTTP_HOST="localhost", QUARKUS_HTTP_PORT="8081"):
+        sender = start_process("java -jar sender/target/hello-world-quarkus-jms-sender-1.0.0-SNAPSHOT-runner.jar")
 
-    with working_env(quarkus.http.host="localhost", quarkus.http.port="8082"):
-        quarkus-jms-receiver = start_process("java -jar receiver/target/hello-world-quarkus-jms-receiver-1.0.0-SNAPSHOT-runner.jar")
+    with working_env(QUARKUS_HTTP_HOST="localhost", QUARKUS_HTTP_PORT="8082"):
+        receiver = start_process("java -jar receiver/target/hello-world-quarkus-jms-receiver-1.0.0-SNAPSHOT-runner.jar")
 
     while True:
         try:
@@ -49,5 +49,5 @@ try:
     call("curl http://localhost:8082/api/receive")
     call("curl http://localhost:8082/api/receive")
 finally:
-    terminate_process(quarkus-jms-sender)
-    terminate_process(quarkus-jms-receiver)
+    terminate_process(sender)
+    terminate_process(receiver)
