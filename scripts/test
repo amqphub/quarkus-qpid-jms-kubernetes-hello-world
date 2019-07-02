@@ -28,10 +28,10 @@ receiver = None
 
 try:
     with working_env(QUARKUS_HTTP_HOST="localhost", QUARKUS_HTTP_PORT="8081"):
-        sender = start_process("java -jar sender/target/hello-world-quarkus-jms-sender-1.0.0-SNAPSHOT-runner.jar")
+        sender = start_process("java -Dquarkus.http.port=8081 -jar sender/target/hello-world-quarkus-jms-sender-1.0.0-SNAPSHOT-runner.jar")
 
     with working_env(QUARKUS_HTTP_HOST="localhost", QUARKUS_HTTP_PORT="8082"):
-        receiver = start_process("java -jar receiver/target/hello-world-quarkus-jms-receiver-1.0.0-SNAPSHOT-runner.jar")
+        receiver = start_process("java -Dquarkus.http.port=8082 -jar receiver/target/hello-world-quarkus-jms-receiver-1.0.0-SNAPSHOT-runner.jar")
 
     while True:
         try:
