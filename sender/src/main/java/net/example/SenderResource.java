@@ -16,15 +16,18 @@
  */
 package net.example;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.Liveness;
+import org.eclipse.microprofile.health.Readiness;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,13 +39,6 @@ public class SenderResource {
     @Inject
     SenderService service;
 
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    @Path("/greeting/{name}")
-    public String greeting(@PathParam("name") String name) {
-        return service.send(name);
-    }
-
     @POST
     @Path("/send")
     @Consumes(MediaType.TEXT_PLAIN)
@@ -51,18 +47,25 @@ public class SenderResource {
         return service.send(string);
     }
 
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        return "Hello from Sender Serivce, hit /send with something to send to the receiver";
+    @Produces
+    @ApplicationScoped
+    @Liveness
+    HealthCheck isLive() {
+        LOG.info("SENDER: Checking liveness status");
+        return () -> HealthCheckResponse.named("successful-live").up().build();
     }
 
-    @GET
-    @Path("/ready")
-    @Produces("text/plain")
-    public String ready() {
-        LOG.info("SENDER: I am ready!");
-
-        return "OK\n";
+    @Produces
+    @ApplicationScoped
+    @Readiness
+    HealthCheck isReady() {
+        LOG.info("SENDER: Checking readiness status");
+        return () -> {
+            if (service.isReady()) {
+                return HealthCheckResponse.named("sender-ready").up().build();
+            } else {
+                return HealthCheckResponse.named("sender-initializing").down().build();
+            }
+        };
     }
 }

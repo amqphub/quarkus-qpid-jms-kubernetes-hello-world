@@ -35,8 +35,8 @@ try:
 
     while True:
         try:
-            http_get("http://localhost:8081/api/ready")
-            http_get("http://localhost:8082/api/ready")
+            http_get("http://localhost:8081/health/ready")
+            http_get("http://localhost:8082/health/ready")
 
             break
         except CalledProcessError:

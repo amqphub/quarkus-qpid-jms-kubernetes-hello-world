@@ -28,8 +28,6 @@ import javax.jms.Topic;
 
 import org.apache.qpid.jms.JmsConnectionFactory;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.health.HealthCheck;
-import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +35,7 @@ import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 
 @ApplicationScoped
-public class SenderService implements HealthCheck {
+public class SenderService {
 
     private static Logger LOG = LoggerFactory.getLogger(SenderService.class);
 
@@ -95,8 +93,7 @@ public class SenderService implements HealthCheck {
         return "OK\n";
     }
 
-    @Override
-    public HealthCheckResponse call() {
-        return HealthCheckResponse.named("Health check for Sender Service:").up().build();
+    public boolean isReady() {
+        return jmsProducer != null;
     }
 }

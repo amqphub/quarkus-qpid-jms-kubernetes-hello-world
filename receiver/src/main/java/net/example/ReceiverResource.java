@@ -18,11 +18,17 @@ package net.example;
 
 import java.util.Optional;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.Liveness;
+import org.eclipse.microprofile.health.Readiness;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,17 +42,31 @@ public class ReceiverResource {
 
     @GET
     @Path("/receive")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public String receive() {
         LOG.info("RECEIVER: Receive endpoint invoked");
         return Optional.ofNullable(service.poll()).orElse("");
     }
 
-    @GET
-    @Path("/ready")
-    @Produces("text/plain")
-    public String ready() {
-        LOG.info("RECEIVER: I am ready!");
-        return "OK\n";
+    @Produces
+    @ApplicationScoped
+    @Liveness
+    HealthCheck isLive() {
+        LOG.info("RECEIVER: Checking liveness status");
+        return () -> HealthCheckResponse.named("successful-live").up().build();
+    }
+
+    @Produces
+    @ApplicationScoped
+    @Readiness
+    HealthCheck isReady() {
+        LOG.info("RECEIVER: Checking readiness status");
+        return () -> {
+            if (service.isReady()) {
+                return HealthCheckResponse.named("receiver-ready").up().build();
+            } else {
+                return HealthCheckResponse.named("receiver-initializing").down().build();
+            }
+        };
     }
 }
