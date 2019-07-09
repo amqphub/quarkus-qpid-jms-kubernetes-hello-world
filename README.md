@@ -33,6 +33,26 @@ operations.
 
 ## Steps
 
+1. Change directory to the sender application, build it to prepare for 
+   creating a docker image to deploy.
+
+   ```bash
+   $ cd sender/
+   $ mvn package -Pnative -Dnative-image.docker-build=true
+   [Maven output]
+   cd ../
+   ```
+
+1. Change directory to the receiver application, build it to prepare for 
+   creating a docker image to deploy.
+
+   ```bash
+   $ cd receiver/
+   $ mvn package -Pnative -Dnative-image.docker-build=true
+   [Maven output]
+   cd ../
+   ```
+
 1. Configure your shell to use the Minikube Docker instance:
 
    ```bash
@@ -50,13 +70,11 @@ operations.
    service/broker exposed
    ```
 
-1. Change directory to the sender application, build it, create a
+1. Change directory to the sender application, create a
    deployment, and expose it as a service:
 
    ```bash
    $ cd sender/
-   $ mvn package -Pnative -Dnative-image.docker-build=true
-   [Maven output]
    $ docker build -f src/main/docker/Dockerfile.native -t quarkus-jms-sender .
    [Docker output]
    $ kubectl run sender --image quarkus-jms-sender --image-pull-policy Never --env MESSAGING_SERVICE_HOST=broker
@@ -65,15 +83,11 @@ operations.
    service/sender exposed
    ```
 
-To build and run in native build mode:
-
-1. Change directory to the receiver application, build it, create a
+1. Change directory to the receiver application, create a
    deployment, and expose it as a service:
 
    ```bash
    $ cd ../receiver/
-   $ mvn package -P native -Dnative-image.docker-build=true
-   [Maven output]
    $ docker build -f src/main/docker/Dockerfile.native -t quarkus-jms-receiver .
    [Docker output]
    $ kubectl run receiver --image quarkus-jms-receiver --image-pull-policy Never --env MESSAGING_SERVICE_HOST=broker
@@ -100,9 +114,9 @@ To build and run in native build mode:
 1. Use `curl` to test the readiness of the send and receive services:
 
    ```bash
-   $ curl $sender_url/api/ready
+   $ curl $sender_url/health/ready
    OK
-   $ curl $receiver_url/api/ready
+   $ curl $receiver_url/health/ready
    OK
    ```
 
@@ -121,11 +135,11 @@ To build and run in native build mode:
    service:
 
    ```bash
-   $ curl -X POST $receiver_url/api/receive
+   $ curl $receiver_url/api/receive
    hello1
-   $ curl -X POST $receiver_url/api/receive
+   $ curl $receiver_url/api/receive
    hello2
-   $ curl -X POST $receiver_url/api/receive
+   $ curl $receiver_url/api/receive
    hello3
    ```
 
