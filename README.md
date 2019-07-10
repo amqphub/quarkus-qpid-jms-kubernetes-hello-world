@@ -77,9 +77,10 @@ operations.
    $ cd sender/
    $ docker build -f src/main/docker/Dockerfile.native -t quarkus-jms-sender .
    [Docker output]
-   $ kubectl run --generator=run-pod/v1 --image=quarkus-jms-sender sender --dry-run --env MESSAGING_SERVICE_HOST=broker
+   $ kubectl apply -f kubernetes.yml
+//   $ kubectl run --generator=run-pod/v1 --image=quarkus-jms-sender sender --dry-run --env MESSAGING_SERVICE_HOST=broker
    deployment.apps/sender created
-   $ kubectl expose deployment/sender --port 8080 --type NodePort
+//   $ kubectl expose deployment/sender --port 8080 --type NodePort
    service/sender exposed
    ```
 
@@ -90,9 +91,10 @@ operations.
    $ cd ../receiver/
    $ docker build -f src/main/docker/Dockerfile.native -t quarkus-jms-receiver .
    [Docker output]
-   $ kubectl run --generator=run-pod/v1 --image=quarkus-jms-receiver receiver --dry-run --env MESSAGING_SERVICE_HOST=broker
+   $ kubectl apply -f kubernetes.yml
+//   $ kubectl run --generator=run-pod/v1 --image=quarkus-jms-receiver receiver --dry-run --env MESSAGING_SERVICE_HOST=broker
    deployment.apps/receiver created
-   $ kubectl expose deployment/receiver --port 8080 --type NodePort
+//   $ kubectl expose deployment/receiver --port 8080 --type NodePort
    service/receiver exposed
    ```
 
@@ -107,7 +109,7 @@ operations.
 1. Save the `NodePort` URLs in local variables:
 
    ```bash
-   $ sender_url=$(minikube quarkus-jms-service sender --url)
+   $ sender_url=$(minikube service quarkus-jms-sender --url)
    $ receiver_url=$(minikube service quarkus-jms-receiver --url)
    ```
 
