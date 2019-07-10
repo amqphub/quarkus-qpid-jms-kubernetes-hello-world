@@ -64,10 +64,10 @@ operations.
 1. Create a broker deployment and expose it as a service:
 
    ```bash
-   $ kubectl run broker --image docker.io/ssorj/activemq-artemis
-   deployment.apps/broker created
-   $ kubectl expose deployment/broker --port 5672
-   service/broker exposed
+   $ kubectl run messaging --generator=run-pod/v1 --image docker.io/ssorj/activemq-artemis
+   pod/messaging created
+   $ kubectl expose pod messaging --type=NodePort --port=5672
+   service/messaging exposed
    ```
 
 1. Change directory to the sender application, create a
@@ -78,10 +78,8 @@ operations.
    $ docker build -f src/main/docker/Dockerfile.native -t quarkus-jms-sender .
    [Docker output]
    $ kubectl apply -f kubernetes.yml
-//   $ kubectl run --generator=run-pod/v1 --image=quarkus-jms-sender sender --dry-run --env MESSAGING_SERVICE_HOST=broker
-   deployment.apps/sender created
-//   $ kubectl expose deployment/sender --port 8080 --type NodePort
-   service/sender exposed
+   service/quarkus-jms-sender created
+   deployment.apps/quarkus-jms-sender created
    ```
 
 1. Change directory to the receiver application, create a
@@ -92,10 +90,8 @@ operations.
    $ docker build -f src/main/docker/Dockerfile.native -t quarkus-jms-receiver .
    [Docker output]
    $ kubectl apply -f kubernetes.yml
-//   $ kubectl run --generator=run-pod/v1 --image=quarkus-jms-receiver receiver --dry-run --env MESSAGING_SERVICE_HOST=broker
-   deployment.apps/receiver created
-//   $ kubectl expose deployment/receiver --port 8080 --type NodePort
-   service/receiver exposed
+   service/quarkus-jms-receiver created
+   deployment.apps/quarkus-jms-receiver created
    ```
 
 1. Check that the deployments and pods are present.  You should see
@@ -117,9 +113,16 @@ operations.
 
    ```bash
    $ curl $sender_url/health/ready
-   OK
+   {
+    "status": "UP",
+    "checks": [
+   ]
+
    $ curl $receiver_url/health/ready
-   OK
+   {
+    "status": "UP",
+    "checks": [
+   ]
    ```
 
 1. Use `curl` to send strings to the sender service:
