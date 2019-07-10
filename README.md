@@ -77,7 +77,7 @@ operations.
    $ cd sender/
    $ docker build -f src/main/docker/Dockerfile.native -t quarkus-jms-sender .
    [Docker output]
-   $ kubectl run sender --image quarkus-jms-sender --image-pull-policy Never --env MESSAGING_SERVICE_HOST=broker
+   $ kubectl run --generator=run-pod/v1 --image=quarkus-jms-sender sender --dry-run --env MESSAGING_SERVICE_HOST=broker
    deployment.apps/sender created
    $ kubectl expose deployment/sender --port 8080 --type NodePort
    service/sender exposed
@@ -90,7 +90,7 @@ operations.
    $ cd ../receiver/
    $ docker build -f src/main/docker/Dockerfile.native -t quarkus-jms-receiver .
    [Docker output]
-   $ kubectl run receiver --image quarkus-jms-receiver --image-pull-policy Never --env MESSAGING_SERVICE_HOST=broker
+   $ kubectl run --generator=run-pod/v1 --image=quarkus-jms-receiver receiver --dry-run --env MESSAGING_SERVICE_HOST=broker
    deployment.apps/receiver created
    $ kubectl expose deployment/receiver --port 8080 --type NodePort
    service/receiver exposed
@@ -107,8 +107,8 @@ operations.
 1. Save the `NodePort` URLs in local variables:
 
    ```bash
-   $ sender_url=$(minikube service sender --url)
-   $ receiver_url=$(minikube service receiver --url)
+   $ sender_url=$(minikube quarkus-jms-service sender --url)
+   $ receiver_url=$(minikube service quarkus-jms-receiver --url)
    ```
 
 1. Use `curl` to test the readiness of the send and receive services:
