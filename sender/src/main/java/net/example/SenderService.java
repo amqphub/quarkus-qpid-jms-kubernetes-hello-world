@@ -50,7 +50,10 @@ public class SenderService {
     private JMSProducer jmsProducer;
 
     void onStart(@Observes StartupEvent ev) throws Exception {
-        LOG.info("JMS Sender starting");
+        LOG.info("JMS Sender starting...");
+
+        LOG.info("Messaging service host: {}", System.getenv("MESSAGING_SERVICE_HOST"));
+        LOG.info("Messaging service port: {}", System.getenv("MESSAGING_SERVICE_PORT"));
 
         final ConnectionFactory factory = new JmsConnectionFactory(connectionUri);
 

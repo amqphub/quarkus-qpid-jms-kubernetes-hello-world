@@ -50,7 +50,10 @@ public class ReceiverService {
     private ConcurrentLinkedQueue<String> strings = new ConcurrentLinkedQueue<>();
 
     void onStart(@Observes StartupEvent ev) throws Exception {
-        LOG.info("JMS Receiver service starting");
+        LOG.info("JMS Receiver service starting...");
+
+        LOG.info("Messaging service host: {}", System.getenv("MESSAGING_SERVICE_HOST"));
+        LOG.info("Messaging service port: {}", System.getenv("MESSAGING_SERVICE_PORT"));
 
         final ConnectionFactory factory = new JmsConnectionFactory(connectionUri);
 
