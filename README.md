@@ -1,4 +1,4 @@
-# Getting started with JMS on Kubernetes usiong Quarkus
+# Getting started with JMS on Kubernetes using the Quarkus Qpid JMS extension
 
 This guide shows you how to send and receive messages using [Apache
 Qpid JMS](http://qpid.apache.org/components/jms/index.html) and
