@@ -33,7 +33,7 @@ operations.
 
 ## Steps
 
-1. Change directory to the sender application, build it to prepare for 
+1. Change directory to the sender application, build it to prepare for
    creating a docker image to deploy.
 
    ```bash
@@ -43,7 +43,7 @@ operations.
    cd ../
    ```
 
-1. Change directory to the receiver application, build it to prepare for 
+1. Change directory to the receiver application, build it to prepare for
    creating a docker image to deploy.
 
    ```bash
@@ -66,7 +66,7 @@ operations.
    ```bash
    $ kubectl run messaging --generator=run-pod/v1 --image docker.io/ssorj/activemq-artemis
    pod/messaging created
-   $ kubectl expose pod messaging --type=NodePort --port=5672
+   $ kubectl expose pod messaging --type=ClusterIP --port=5672
    service/messaging exposed
    ```
 

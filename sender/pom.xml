@@ -26,7 +26,7 @@
     <quarkus-qpid-jms.version>0.0.1-SNAPSHOT</quarkus-qpid-jms.version>
     <maven-enforcer-version>1.4.1</maven-enforcer-version>
     <surefire-plugin.version>2.22.0</surefire-plugin.version>
-    <quarkus.version>0.18.0</quarkus.version>
+    <quarkus.version>0.19.1</quarkus.version>
     <maven-compiler-version>3.8.0</maven-compiler-version>
 
     <supported-maven-versions>[3.5.3,)</supported-maven-versions>
