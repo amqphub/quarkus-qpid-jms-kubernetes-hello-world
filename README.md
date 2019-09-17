@@ -3,7 +3,8 @@
 This guide shows you how to send and receive messages using [Apache
 Qpid JMS](http://qpid.apache.org/components/jms/index.html) and
 [ActiveMQ Artemis](https://activemq.apache.org/artemis/index.html) on
-[Kubernetes](https://kubernetes.io/) using a Quarkus Qpid JMS extension.
+[Kubernetes](https://kubernetes.io/) using a
+[Quarkus Qpid JMS extension](https://github.com/amqphub/quarkus-qpid-jms).
 It uses the [AMQP 1.0](http://www.amqp.org/) message protocol to send
 and receive messages.
 
@@ -26,7 +27,7 @@ operations.
 
 ## Prerequisites
 
-* For native builds, [GraalVM](https://www.graalvm.org/) version [19.0.2](https://github.com/oracle/graal/releases/tag/vm-19.0.2)+ [installed](https://www.graalvm.org/docs/getting-started), with `GRAALVM_HOME` set and [native-image extension](https://www.graalvm.org/docs/reference-manual/aot-compilation/).
+* Optional: For native builds without using docker, [GraalVM](https://www.graalvm.org/) version [19.1.1](https://github.com/oracle/graal/releases/tag/vm-19.1.1)+ [installed](https://www.graalvm.org/docs/getting-started), with `GRAALVM_HOME` set and [native-image extension](https://www.graalvm.org/docs/reference-manual/aot-compilation/).
 
 * [Install and run Minikube in your
   environment](https://kubernetes.io/docs/setup/minikube/)
@@ -151,6 +152,7 @@ operations.
 ## More resources
 
 * [Quarkus Getting Started](https://quarkus.io/get-started/)
+* [Quarkus Qpid JMS extension](https://github.com/amqphub/quarkus-qpid-jms)
 * [Getting started with Minikube](https://kubernetes.io/docs/tutorials/hello-minikube/)
 * [Apache ActiveMQ Artemis](https://activemq.apache.org/artemis/)
 * [Artemis container image](https://cloud.docker.com/u/ssorj/repository/docker/ssorj/activemq-artemis)
